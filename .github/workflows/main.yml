@@ -44,12 +44,13 @@ jobs:
 #         ./configure --disable-shared --enable-static --prefix=/usr/local/$HOST --host=$HOST --build=`dpkg-architecture -qDEB_BUILD_GNU_TYPE` --without-openssl --with-wincng LIBS="-lws2_32"
 #         sudo make -j2 install
     - name: Checkout the latest tag
-      run: |
-        git clone https://github.com/aria2/aria2.git
-        cd aria2
-        git checkout $(git describe --tags --abbrev=0)
-#     - name: Edit OptionHandlerFactory.cc
-#       run: sed -i 's/16,/64,/g' src/OptionHandlerFactory.cc
+    - uses: actions/checkout@v2
+      with:
+        repository: aria2/aria2
+        fetch-depth: 0
+    - run: git checkout $(git describe --tags --abbrev=0)
+    - name: Edit OptionHandlerFactory.cc
+      run: sed -i 's/16,/64,/g' src/OptionHandlerFactory.cc
 #     - name: Build aria2
 #       env:
 #         CXXFLAGS: -g -O2 -mwindows
