@@ -63,8 +63,8 @@ jobs:
     - name: Edit OptionHandlerFactory.cc
       run: sed -i 's/16,/64,/g' src/OptionHandlerFactory.cc
     - name: Build aria2
-      env:
-        CXXFLAGS: -g -O2 -mwindows
+      # env:
+      #   CXXFLAGS: -g -O2 -mwindows
       run: |
         autoreconf -i
         ./mingw-config
