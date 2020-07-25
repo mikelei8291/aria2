@@ -25,7 +25,7 @@ jobs:
     #       libssh2-1.9.0.tar.gz
     #     key: ${{ runner.os }}-${{ hashFiles('gmp-6.2.0.tar.lz', 'expat-2.2.9.tar.lz', 'sqlite-autoconf-3320300.tar.gz', 'zlib-1.2.11.tar.xz', 'c-ares-1.16.1.tar.gz', 'libssh2-1.9.0.tar.gz') }}
     - name: Download dependencies
-      if: steps.dependency-packages.outputs.cache-hit != 'true'
+      # if: steps.dependency-packages.outputs.cache-hit != 'true'
       run: wget https://gmplib.org/download/gmp/gmp-6.2.0.tar.lz https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.lz https://www.sqlite.org/2020/sqlite-autoconf-3320300.tar.gz https://zlib.net/zlib-1.2.11.tar.xz https://c-ares.haxx.se/download/c-ares-1.16.1.tar.gz https://www.libssh2.org/download/libssh2-1.9.0.tar.gz
 
     - name: Build dependencies
@@ -56,7 +56,10 @@ jobs:
         repository: aria2/aria2
         fetch-depth: 0
     - name: Checkout the latest tag
-      run: git checkout $(git describe --tags --abbrev=0)
+      id: checkout
+      run: |
+        git checkout $(git describe --tags --abbrev=0)
+        echo "::set-output name=tag::$(git describe --tags --abbrev=0 | grep -Po '\d.+$')"
     - name: Edit OptionHandlerFactory.cc
       run: sed -i 's/16,/64,/g' src/OptionHandlerFactory.cc
     - name: Build aria2
@@ -67,5 +70,7 @@ jobs:
         ./mingw-config
         make -j2
         $HOST-strip src/aria2c.exe
-    - name: Run SSH
-      uses: mxschmitt/action-tmate@v2
+    - uses: actions/upload-artifact@v2
+      with:
+        name: aria2c-${{ steps.checkout.outputs.tag }}
+        path: src/aria2c.exe
