@@ -43,6 +43,7 @@ jobs:
         cd ../libssh2-1.9.0
         ./configure --disable-shared --enable-static --prefix=/usr/local/$HOST --host=$HOST --build=`dpkg-architecture -qDEB_BUILD_GNU_TYPE` --without-openssl --with-wincng LIBS="-lws2_32"
         sudo make -j2 install
+        sudo rm -rf *
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
     - name: Checkout the latest tag
