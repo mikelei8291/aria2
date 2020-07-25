@@ -8,7 +8,7 @@ jobs:
     env:
       HOST: x86_64-w64-mingw32
     steps:
-    - name: Install dependencies
+    - name: Install packages
       run: |
         sudo apt update
         sudo apt install -y make binutils autoconf automake autotools-dev libtool pkg-config git curl dpkg-dev gcc-mingw-w64 g++-mingw-w64 autopoint libcppunit-dev libxml2-dev libgcrypt11-dev lzip
@@ -23,7 +23,7 @@ jobs:
           zlib-1.2.11.tar.xz
           c-ares-1.16.1.tar.gz
           libssh2-1.9.0.tar.gz
-        key: ${{ hashFiles('gmp-6.2.0.tar.lz', 'expat-2.2.9.tar.lz', 'sqlite-autoconf-3320300.tar.gz', 'zlib-1.2.11.tar.xz', 'c-ares-1.16.1.tar.gz', 'libssh2-1.9.0.tar.gz') }}
+        key: ${{ runner.os }}-${{ hashFiles('gmp-6.2.0.tar.lz', 'expat-2.2.9.tar.lz', 'sqlite-autoconf-3320300.tar.gz', 'zlib-1.2.11.tar.xz', 'c-ares-1.16.1.tar.gz', 'libssh2-1.9.0.tar.gz') }}
     - name: Download dependencies
       if: steps.dependency-packages.outputs.cache-hit != 'true'
       run: wget https://gmplib.org/download/gmp/gmp-6.2.0.tar.lz https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.lz https://www.sqlite.org/2020/sqlite-autoconf-3320300.tar.gz https://zlib.net/zlib-1.2.11.tar.xz https://c-ares.haxx.se/download/c-ares-1.16.1.tar.gz https://www.libssh2.org/download/libssh2-1.9.0.tar.gz
